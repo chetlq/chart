@@ -1,7 +1,7 @@
 var express    = require('express');        // call express
 var app        = express();
 var bodyParser = require('body-parser');
-//var html = require('./index.htlm')
+//var html = require('./index')
 
 // var MongoClient = require('mongodb');             // define our app using express
 // //var bodyParser = require('body-parser');
@@ -21,11 +21,12 @@ var bodyParser = require('body-parser');
   //   //  console.error(err.stack);
   //   //  res.status(500).send('Something broke!');
   // //  });
-  //   app.use(errorHandler);
-  //   app.set('port', process.env.PORT || 8001);
+    app.use(errorHandler);
     app.get('/', function(req, res) {
-      res.send('hello world');
+        res.sendFile(__dirname + '/index.html');
     });
+    app.set('port', process.env.PORT || 8001);
+
     var server = app.listen(app.get('port'), function() {
       console.log('Express server listening on port ' + server.address().port);
     });
