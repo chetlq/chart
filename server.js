@@ -1,7 +1,7 @@
 var express    = require('express');        // call express
 var app        = express();
 var bodyParser = require('body-parser');
-var birds = require('./app/routers/birds');
+
 // var MongoClient = require('mongodb');             // define our app using express
 // //var bodyParser = require('body-parser');
 // var mongoose   = require('mongoose');
