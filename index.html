@@ -1,20 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>My Node App!</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <style>
-        body { padding-top:50px; }
-    </style>
-</head>
-<body class="container">
+  <script type="text/javascript">
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
 
-    <div class="jumbotron">
-        <h1>My App!</h1>
-    </div>
+      var data = google.visualization.arrayToDataTable([
+        ['Element', 'Density', { role: 'style' }],
+        ['Copper', 8.94, '#b87333', ],
+        ['Silver', -10.49, 'silver'],
+        ['Gold', 19.30, 'gold'],
+        ['Platinum', 21.45, 'color: #e5e4e2' ]
+      ]);
 
-</body>
-</html>
+      var options = {
+        title: "Density of Precious Metals, in g/cm^3",
+        bar: {groupWidth: '95%'},
+        legend: 'none',
+      };
+
+      var chart_div = document.getElementById('chart_div');
+      var chart = new google.visualization.ColumnChart(chart_div);
+
+      // Wait for the chart to finish drawing before calling the getImageURI() method.
+      google.visualization.events.addListener(chart, 'ready', function () {
+        chart_div.innerHTML = '<img src="' + chart.getImageURI() + '">';
+        console.log(chart_div.innerHTML);
+      });
+
+      chart.draw(data, options);
+
+  }
+  </script>
+
+<div id='chart_div'></div>
