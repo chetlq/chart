@@ -2,20 +2,20 @@ var express    = require('express');        // call express
 var app        = express();
 var bodyParser = require('body-parser');
 var birds = require('./app/routers/birds');
-var MongoClient = require('mongodb');             // define our app using express
-//var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
-//var url = "mongodb://localhost:27017/mybase";
-var url = "mongodb://sbertech:Zx350707@ds157112.mlab.com:57112/sendmom";
-
-var jsonParser = bodyParser.json();
-
-mongoose.connect(url); // connect to our database
+// var MongoClient = require('mongodb');             // define our app using express
+// //var bodyParser = require('body-parser');
+// var mongoose   = require('mongoose');
+// //var url = "mongodb://localhost:27017/mybase";
+// var url = "mongodb://sbertech:Zx350707@ds157112.mlab.com:57112/sendmom";
+//
+// var jsonParser = bodyParser.json();
+//
+// mongoose.connect(url); // connect to our database
 
 
     app.use(bodyParser.json());
     //app.use(bodyParser.urlencoded());
-    app.use('/', birds);
+  ///  app.use('/', birds);
     //app.use(function(err, req, res, next) {
     //  console.error(err.stack);
     //  res.status(500).send('Something broke!');
