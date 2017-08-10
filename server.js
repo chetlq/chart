@@ -13,16 +13,18 @@ var bodyParser = require('body-parser');
 // mongoose.connect(url); // connect to our database
 
 
-    app.use(bodyParser.json());
-    //app.use(bodyParser.urlencoded());
-  ///  app.use('/', birds);
-    //app.use(function(err, req, res, next) {
-    //  console.error(err.stack);
-    //  res.status(500).send('Something broke!');
-  //  });
-    app.use(errorHandler);
-    app.set('port', process.env.PORT || 8001);
-
+  //   app.use(bodyParser.json());
+  //   //app.use(bodyParser.urlencoded());
+  // ///  app.use('/', birds);
+  //   //app.use(function(err, req, res, next) {
+  //   //  console.error(err.stack);
+  //   //  res.status(500).send('Something broke!');
+  // //  });
+  //   app.use(errorHandler);
+  //   app.set('port', process.env.PORT || 8001);
+    app.get('/', function(req, res) {
+        res.sendFile(__dirname + '/index.html');
+    });
     var server = app.listen(app.get('port'), function() {
       console.log('Express server listening on port ' + server.address().port);
     });
