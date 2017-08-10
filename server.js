@@ -22,9 +22,15 @@ var bodyParser = require('body-parser');
   // //  });
   //   app.use(errorHandler);
   //   app.set('port', process.env.PORT || 8001);
+<<<<<<< HEAD
     //app.get('/', function(req, res) {
       var er=  res.sendFile(__dirname + '/index.html');
     //});
+=======
+    app.get('/', function(req, res) {
+        res.sendFile(__dirname + '/index.html');
+    });
+>>>>>>> f5457ecb9161fcb2b13e2cbfae6aa6153bab432e
     var server = app.listen(app.get('port'), function() {
       console.log('Express server listening on port ' + server.address().port);
     });
