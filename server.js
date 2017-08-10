@@ -1,7 +1,7 @@
 var express    = require('express');        // call express
 var app        = express();
 var bodyParser = require('body-parser');
-var html = require('./index.htlm')
+//var html = require('./index.htlm')
 
 // var MongoClient = require('mongodb');             // define our app using express
 // //var bodyParser = require('body-parser');
