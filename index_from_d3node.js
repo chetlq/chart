@@ -24,7 +24,7 @@ function bar({
      return { top: 30, right: 20, bottom: 30, left: 50 }
      break;
   case -1:
-    return { top: 55, right: 20, bottom: 20, left: 50 }
+    return { top: 65, right: 20, bottom: 20, left: 50 }
     break;
   case 1:
     return { top: 20, right: 20, bottom: 55, left: 50 }
@@ -86,6 +86,7 @@ var arr_x2 = data.map(function(d) {
 });
 
 
+
   x.domain(data.map(function(d) {
 
     return d.key;
@@ -121,7 +122,13 @@ switch (getZnak(arrZnak)) {
  data(data).
  enter().
  append('rect')
- .attr("class", function(d) { return "bar bar--" + (d.value < 0 ? "negative" : "positive"); })
+ .attr("fill",  function(d) {
+   //console.log(Math.round((d.value /(_d3.min(data, (d) => d.value)))*255));
+   var k = _d3.min(data, (d) => d.value);
+   console.log(k);
+   return "rgb(0, "+Math.round(255-((d.value /k )*255))+", " + Math.round(355-((d.value /k )*255)) + ")"
+ })
+ //.attr("class", function(d) { return "bar bar--" + (d.value < 0 ? "negative" : "positive"); })
  .attr('x', function(d) {
       return x(d.key);
     }).attr('width', x.bandwidth()).attr('y', function(d) {
@@ -152,7 +159,7 @@ switch (getZnak(arrZnak)) {
     .attr("dx", (function(){
       switch (getZnak(arrZnak)) {
         case -1:
-          return "5.8em"
+          return "6.3em"//"5.8em"
           break;
         case 0:
         return "6.3em"
@@ -165,7 +172,7 @@ switch (getZnak(arrZnak)) {
     .attr("dy",(function(){
       switch (getZnak(arrZnak)) {
         case -1:
-          return ".2em"
+          return "1.2em"//".2em"
           break;
         case 0:
         return "1.2em"
@@ -176,7 +183,7 @@ switch (getZnak(arrZnak)) {
     .attr("transform", (function(){
       switch (getZnak(arrZnak)) {
         case -1:
-          return "rotate(-45)"
+          return "rotate(-90)"
           break;
         case 0:
         return "rotate(-90)"
@@ -221,7 +228,7 @@ switch (getZnak(arrZnak)) {
     .attr("transform",(function(){
       switch (getZnak(arrZnak)) {
         case -1:
-          return "rotate(-45)"
+          return "rotate(-90)"
           break;
         case 0:
         return "rotate(-90)"
@@ -243,13 +250,21 @@ switch (getZnak(arrZnak)) {
     g.selectAll("text.bar")
         .data(data)
       .enter().append("text")
-        .attr("class", "bar")
+      .attr("fill",  function(d) {
+        //console.log(Math.round((d.value /(_d3.min(data, (d) => d.value)))*255));
+        var k = _d3.min(data, (d) => d.value);
+        console.log(k);
+        return "rgb(" + Math.round(255-((d.value /k )*255)) + ", "+Math.round(((d.value /k )*155))+", 0)"
+      })
         .attr("text-anchor", "middle")
+
+        //.attr("transform","rotate(-5)")
         .attr("x", function(d) { return x(d.key) + x.bandwidth()/2; })
         .attr("y", function(d) {
           if (d.value>0){return y(d.value) - 5;} else { return y(d.value) +15; }
 
         })
+        //.attr("transform","rotate(-2)")
         .text(function(d) { return d.value; });
 
         return d3n;

@@ -8,34 +8,32 @@ var app        = express();
 
 var moment = require('moment');
 
+function randomDate(){
+   var startDate = new Date(2000,0,1).getTime();
+   var endDate =  new Date(2018,0,1).getTime();
+   var spaces = (endDate - startDate);
+   var timestamp = Math.round(Math.random() * spaces);
+   timestamp += startDate;
+   return new Date(timestamp);
+}
+function formatDate(date){
+    var month = randomDate().getMonth()+1;
+    var day = randomDate().getDate();
 
-var data =
-[
-  { "key": "25.10.2017", "value": -94 },
-  { "key": "25.10.2017", "value": -19 },
-  { "key": "25.10.2017", "value": -26 },
-  { "key": "26.3.2017", "value": -21 },
-  { "key": "15.10.2017", "value": -21 },
-  { "key": "2.10.2017", "value": -56 },
-  { "key": "25.10.2018", "value": -29 },
-  { "key": "25.11.2018", "value": -291 },
-  { "key": "25.12.2018", "value": -29 },
-  { "key": "25.10.2019", "value": -200 },
-  { "key": "2.10.2013", "value": -101 },
-  { "key": "25.10.2013", "value": 31 },
-  { "key": "25.10.2017", "value": 94 },
-  { "key": "25.10.2017", "value": 19 },
-  { "key": "25.10.2017", "value": 26 },
-  { "key": "26.3.2017", "value": 21 },
-  { "key": "15.10.2017", "value": 21 },
-  { "key": "2.10.2017", "value": 56 },
-  { "key": "25.10.2018", "value": 29 },
-  { "key": "25.11.2018", "value": 291 },
-  { "key": "25.12.2018", "value": 29 },
-  { "key": "25.10.2019", "value": 200 },
-  { "key": "2.10.2013", "value": 101 },
-  { "key": "25.10.2013", "value": 31 }
- ];
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+
+    return String(day+"."+month+"."+date.getFullYear())  ;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var data = [];
+for (var i = 0; i < 100; i++) {
+  data.push({ "key": formatDate(randomDate()), "value": getRandomInt(-5000, 0) })
+};
 
   data.sort(function(a,b){
     if (moment(a.key, "DD.MM.YYYY")>moment(b.key, "DD.MM.YYYY")) {return 1}
@@ -47,6 +45,7 @@ var data =
     };
         return currentItem
 });
+data[0] = { "key": formatDate(randomDate())+"\\n"+formatDate(randomDate()), "value": -4000 }
 data.sort(function(a,b){
   if (a.value>b.value) {return 1}
   else{return -1}
