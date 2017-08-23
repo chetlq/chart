@@ -27,7 +27,7 @@ function bar({
     return { top: 65, right: 20, bottom: 20, left: 50 }
     break;
   case 1:
-    return { top: 20, right: 20, bottom: 55, left: 50 }
+    return { top: 20, right: 20, bottom: 65, left: 50 }
     break;
 
    default:
@@ -61,7 +61,24 @@ function bar({
     const height = _height - _margin.top - _margin.bottom;
 var arrZnak = _d3.extent(data, (d) => d.value);
 
+function count(element, index, array) {
+  return element.length;
+}
 
+var nest = _d3.nest().key(function (d) {
+  if (d.value<0) { return ((-d.value)+"").trim();}
+  else {return (d.value+"").trim();}
+
+}).entries(data);
+
+function printArray(nest) {
+
+nest.forEach(function (e) {
+
+            console.log(e.key.length+" : "+e.key);
+
+});
+}
 
 
   const g = d3n.createSVG(_width, _height)
@@ -70,6 +87,8 @@ var arrZnak = _d3.extent(data, (d) => d.value);
 
   var x = _d3.scaleBand().range([0, width]).padding(0.05);
   var x2 = _d3.scaleBand().range([0, width]).padding(0.05);
+  var x3 = _d3.scaleBand().range([0, width]).padding(0.05);
+
 
   var y = _d3.scaleLinear().range([height, 0]); //.domain(_d3.extent(data, function(d) { return d.value; })).range([height, 0]);
   var yAxis = _d3.axisLeft()
@@ -85,6 +104,15 @@ var arr_x2 = data.map(function(d) {
 
 });
 
+var arr_x3 = data.map(function(d) {
+  if(d.value>0) return d.value;
+
+});
+x3.domain(data.map(function(d) {
+
+  return d.value;
+
+}));
 
 
   x.domain(data.map(function(d) {
@@ -147,6 +175,63 @@ switch (getZnak(arrZnak)) {
 
 
 
+    g.append("g")
+
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + y(0)+ ")")
+      .call(_d3.axisTop(x3).tickValues(arr_x3).tickSize(0))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", (function(){
+                printArray(nest);
+        switch (getZnak(arrZnak)) {
+          case 1:
+            return "0em"
+            break;
+          case 0:
+var k = data.map(function(d) {
+
+  return d.value;
+
+});
+console.log(" "+k);
+
+
+
+
+          return "3em"
+            break;
+        }
+      })())
+      .attr("dy", (function(){
+        switch (getZnak(arrZnak)) {
+          case 1:
+            return "0em"
+            break;
+          case 0:
+          return "1.5em"
+            break;
+        }
+      })())
+
+      // .attr("dx", "-.8em")
+      // .attr("dy", "-.55em")
+      .attr("transform",(function(){
+        switch (getZnak(arrZnak)) {
+          case -1:
+            return "rotate(-90)"
+            break;
+          case 0:
+          return "rotate(-90)"
+            break;
+          case 1:
+            return "rotate(-45)"
+            break;
+        }
+      })());
+
+
+
   g.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + y(0)+ ")")
@@ -169,17 +254,17 @@ switch (getZnak(arrZnak)) {
 
 
     //"5.8em")
-    .attr("dy",(function(){
-      switch (getZnak(arrZnak)) {
-        case -1:
-          return "1.2em"//".2em"
-          break;
-        case 0:
-        return "1.2em"
-          break;
-      }
-    })())
-
+    // .attr("dy",(function(){
+    //   switch (getZnak(arrZnak)) {
+    //     case -1:
+    //       return "1.2em"//".2em"
+    //       break;
+    //     case 0:
+    //     return "2.2em"
+    //       break;
+    //   }
+    // })())
+    .attr("dy","1.2em")
     .attr("transform", (function(){
       switch (getZnak(arrZnak)) {
         case -1:
@@ -203,6 +288,7 @@ switch (getZnak(arrZnak)) {
     .selectAll("text")
     .style("text-anchor", "end")
     .attr("dx", (function(){
+
       switch (getZnak(arrZnak)) {
         case 1:
           return "-.5em"
@@ -250,20 +336,22 @@ switch (getZnak(arrZnak)) {
     g.selectAll("text.bar")
         .data(data)
       .enter().append("text")
-      .attr("fill",  function(d) {
-        //console.log(Math.round((d.value /(_d3.min(data, (d) => d.value)))*255));
-        var k = _d3.min(data, (d) => d.value);
-        console.log(k);
-        return "rgb(" + Math.round(255-((d.value /k )*255)) + ", "+Math.round(((d.value /k )*155))+", 0)"
-      })
+      // .attr("fill",  function(d) {
+      //   //console.log(Math.round((d.value /(_d3.min(data, (d) => d.value)))*255));
+      //   var k = _d3.min(data, (d) => d.value);
+      //   console.log(k);
+      //
+      //   return "rgb(" + Math.round(255-((d.value /k )*255)) + ", "+Math.round(((d.value /k )*155))+", 0)"
+      // })
         .attr("text-anchor", "middle")
-
-        //.attr("transform","rotate(-5)")
+      //
+      //   //.attr("transform","rotate(-5)")
         .attr("x", function(d) { return x(d.key) + x.bandwidth()/2; })
         .attr("y", function(d) {
           if (d.value>0){return y(d.value) - 5;} else { return y(d.value) +15; }
 
         })
+        .attr("y", function(d) {return y(d.value)  })
         //.attr("transform","rotate(-2)")
         .text(function(d) { return d.value; });
 

@@ -1,100 +1,89 @@
+const svg2png = require('svg2png');
+const d3 = require('d3-node')().d3;
+//const d3nBar = require('d3node-barchart');
+const d3nBar = require('./chart2.js');
+
+//const d3nBar2 = require('./chart2.js');
 var express    = require('express');        // call express
 var app        = express();
-var bodyParser = require('body-parser');
-const fs = require('fs');
-var d3 = require("d3");
-const d3node = require('d3-node');
-// const output = require('d3node-output')
-const markvisBar = require('markvis-bar');
-const csvString = fs.readFileSync('./data.csv').toString();
-const data = d3.csvParse(csvString);
- data.slice(data.length,1);
-console.log(data);
 
-console.log("-------------111------------------");
-const gen = n => {
- const data = []
+var moment = require('moment');
 
- for (let i = 0; i < n; ++i) {
-   if(i%2==0){var znak = 1}else{znak=-1};
-   data.push({
-     key: i,
-     value: znak*Math.max(10, Math.floor(Math.random() * 100))
-   })
- }
- data.push({
-   key: 11,
-   value: -250
- })
- return data
+function randomDate(){
+   var startDate = new Date(2000,0,1).getTime();
+   var endDate =  new Date(2018,0,1).getTime();
+   var spaces = (endDate - startDate);
+   var timestamp = Math.round(Math.random() * spaces);
+   timestamp += startDate;
+   return new Date(timestamp);
 }
- const data1 = []
-data.forEach(function(item, i) {
-  console.log(item.key+" " + item.value+ ":" + i);
-  data1.push({
-    key: item.key,
-    value: item.value
-  })
+function formatDate(date){
+    var month = randomDate().getMonth()+1;
+    var day = randomDate().getDate();
+
+    month = month < 10 ? '0' + month : month;
+    day = day < 10 ? '0' + day : day;
+
+    return String(day+"."+month+"."+date.getFullYear())  ;
+}
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var data = [];
+for (var i = 0; i <5; i++) {
+  data.push({ "key": formatDate(randomDate()), "value": getRandomInt(-5000, 5000) })
+};
+
+  data.sort(function(a,b){
+    if (moment(a.key, "DD.MM.YYYY")>moment(b.key, "DD.MM.YYYY")) {return 1}
+    else{return -1}
+  });
+ data.reduce(function(previousValue, currentItem, index) {
+     if (previousValue.key.trim()==currentItem.key) {
+      currentItem.key=previousValue.key+" ";
+    };
+        return currentItem
 });
-// // console.log(data[data.length]);
-// console.log("------------------------");
-// console.log(gen(10));
-// Create output files
+//data[0] = { "key": formatDate(randomDate())+/n+formatDate(randomDate()), "value": -4000 }
+// data.sort(function(a,b){
+//   if (a.value>b.value) {return 1}
+//   else{return -1}
+// });
+  console.log(data);
+
+var my_d3bar = d3nBar({ data: data });
+
+var svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
+
+
+// create output files
+app.use(errorHandler);
+app.get('/', function(req, res) {
+
+  svg2png(svgBuffer)
+    .then(buffer => {
+      //fs.writeFile(dest+'.png', buffer);
+      res.setHeader('Content-Type', 'image/png');
+          res.send(buffer);
+      //console.log();
+  })
+    .catch(e => console.error('ERR:', e));
+
+});
 //
-var data3 =
-[ { "key": 0, "value": 19 },
-  { "key": 1, "value": -52 },
-  { "key": 2, "value": 26 },
-  { "key": 3, "value": -10 },
-  { "key": 4, "value": 94 },
-  { "key": 5, "value": -21 },
-  { "key": 6, "value": 56 },
-  { "key": 7, "value": -29 },
-  { "key": 8, "value": -490 },
-  { "key": 9, "value": -31 } ];
-const bar = markvisBar({ data: data3, d3,d3node});
-//output('./', bar)
-//console.log(bar);
+app.set('port', process.env.PORT || 8001);
 
-//var html = require('./index')
-
-// var MongoClient = require('mongodb');             // define our app using express
-// //var bodyParser = require('body-parser');
-// var mongoose   = require('mongoose');
-// //var url = "mongodb://localhost:27017/mybase";
-// var url = "mongodb://sbertech:Zx350707@ds157112.mlab.com:57112/sendmom";
-//
-// var jsonParser = bodyParser.json();
-//
-// mongoose.connect(url); // connect to our database
-
-
-  //   app.use(bodyParser.json());
-  //   //app.use(bodyParser.urlencoded());
-  // ///  app.use('/', birds);
-  //   //app.use(function(err, req, res, next) {
-  //   //  console.error(err.stack);
-  //   //  res.status(500).send('Something broke!');
-  // //  });
-   app.use(errorHandler);
-    // app.get('/', function(req, res) {
-    //     res.sendFile(__dirname + '/index.html');
-    // });
-
-    app.get('/', function(req, res) {
-        res.send(bar);
-    });
-
-    app.set('port', process.env.PORT || 8001);
-
-    var server = app.listen(app.get('port'), function() {
-      console.log('Express server listening on port ' + server.address().port);
-    });
-    function errorHandler(err, req, res, next) {
-   if (res.headersSent) {
-    res.send (err);
-     return next(err);
-   }
-   res.status(400);
-   res.render('error', { error: err });
- }
+var server = app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + server.address().port);
+});
+function errorHandler(err, req, res, next) {
+if (res.headersSent) {
+res.send (err);
+ return next(err);
+}
+res.status(400);
+res.render('error', { error: err });
+}
+  // output: <svg w
