@@ -65,7 +65,7 @@ app.get('/', function(req, res) {
   svg2png(svgBuffer)
     .then(buffer => {
       //fs.writeFile(dest+'.png', buffer);
-            res.status(400);
+            res.status(200);
       res.setHeader('Content-Type', 'image/png');
 
           res.send(buffer);
