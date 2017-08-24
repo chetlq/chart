@@ -32,7 +32,7 @@ function getRandomInt(min, max) {
 };
 
 var data = [];
-for (var i = 0; i <5; i++) {
+for (var i = 0; i <100; i++) {
   data.push({ "key": formatDate(randomDate()), "value": getRandomInt(-5000, 5000) })
 };
 
