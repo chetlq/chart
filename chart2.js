@@ -15,9 +15,9 @@ function bar({
       <div id="chart"></div>
     </div>
   `,
-  style: _style = '',
-  width: _width = 960,
-  height: _height = 500,
+  style: _style = 'body { background-color: white}',
+  width: _width = 1024,
+  height: _height = 600,
   margin: _margin =
   (function(){
    var arrZnak = ((new D3Node()).d3).extent(data, (d) => d.value);
@@ -81,7 +81,7 @@ function count(element, index, array) {
 
   const g = d3n.createSVG(_width, _height)
     .append('g')
-    .attr('transform', `translate(${_margin.left}, ${_margin.top})`);
+    .attr('transform', `translate(${_margin.left}, ${_margin.top})`).attr("fill", "pink");
 
     var x = _d3.scaleBand().range([0, width]).padding(0.05);
     var x2 = _d3.scaleBand().range([0, width]).padding(0.05);
@@ -331,6 +331,9 @@ g.selectAll("text.bar")
     return d.value;
 
   });
+  g.selectAll("body")
+  .attr("style","background-color: black");
+
 
         return d3n;
         }
