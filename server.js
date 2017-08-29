@@ -55,8 +55,8 @@ app.post('/rr', function(req, res) {
  my_d3bar = d3nBar({ data: data });
 
  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
-
-
+res.status(200);
+res.send("ok");
 });
 // for (var i = 0; i <100; i++) {
 //   data.push({ "date": formatDate(randomDate()), "amount": getRandomInt(0, 5000) })
