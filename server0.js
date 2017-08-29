@@ -11,7 +11,8 @@ var arr = [
       { date: '26.08.2017 ', amount: -8773 } ];
 
     //console.log(JSON.stringify(arr));
-    axios.post('https://google-chart.herokuapp.com/rr',arr).then(function(res) {
+    //axios.post('https://google-chart.herokuapp.com/rr',arr).then(function(res) {
+    axios.post('http://localhost:8002/rr',arr).then(function(res) {
       console.log("statusCode: ", res.status); // <======= Here's the status code
       console.log(res.data);
       //console.log("headers: ", res.headers);

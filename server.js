@@ -46,15 +46,15 @@ app.post('/rr', function(req, res) {
     else{return -1}
   });
 //
-//  data.reduce(function(previousValue, currentItem, index) {
-//      if (previousValue.date.trim()==currentItem.date) {
-//       currentItem.date=previousValue.date+" ";
-//     };
-//         return currentItem
-// });
-//  my_d3bar = d3nBar({ data: data });
-//
-//  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
+ data.reduce(function(previousValue, currentItem, index) {
+     if (previousValue.date.trim()==currentItem.date) {
+      currentItem.date=previousValue.date+" ";
+    };
+        return currentItem
+});
+ my_d3bar = d3nBar({ data: data });
+
+ svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
 res.status(200);
 res.send(req.body);
 });
