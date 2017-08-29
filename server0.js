@@ -17,7 +17,7 @@ var arr = [
     // console.log(response.headers);
     // console.log(response.config);
   })
-.catch(res=>console.log(res.statusCode));
+.catch(res=>console.log(res.response.status));
 // create output files
 
 //
