@@ -55,7 +55,7 @@ app.post('/rr', function(req, res) {
  my_d3bar = d3nBar({ data: data });
 
  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
-
+});
 
 
 // svg2png(svgBuffer)
