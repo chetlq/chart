@@ -55,8 +55,20 @@ app.post('/rr', function(req, res) {
  my_d3bar = d3nBar({ data: data });
 
  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
-res.status(200);
-res.send(req.body);
+
+
+
+svg2png(svgBuffer)
+  .then(buffer => {
+    //fs.writeFile(dest+'.png', buffer);
+          res.status(200);
+    res.setHeader('Content-Type', 'image/png');
+
+        res.send(buffer);
+    //console.log();
+})
+  .catch(e => console.error('ERR:', e));
+//res.send(req.body);
 });
 // for (var i = 0; i <100; i++) {
 //   data.push({ "date": formatDate(randomDate()), "amount": getRandomInt(0, 5000) })
