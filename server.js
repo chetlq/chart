@@ -38,34 +38,25 @@ var data = [];
 var my_d3bar;
 
 var svgBuffer;
-app.post('/', function(req, res) {
+app.post('/rr', function(req, res) {
   data = req.body;
   console.log(data);
-//   data.sort(function(a,b){
-//     if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
-//     else{return -1}
-//   });
-//
-//  data.reduce(function(previousValue, currentItem, index) {
-//      if (previousValue.date.trim()==currentItem.date) {
-//       currentItem.date=previousValue.date+" ";
-//     };
-//         return currentItem
-// });
+  data.sort(function(a,b){
+    if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
+    else{return -1}
+  });
+
+ data.reduce(function(previousValue, currentItem, index) {
+     if (previousValue.date.trim()==currentItem.date) {
+      currentItem.date=previousValue.date+" ";
+    };
+        return currentItem
+});
  my_d3bar = d3nBar({ data: data });
 
  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
 
- svg2png(svgBuffer)
-   .then(buffer => {
-     //fs.writeFile(dest+'.png', buffer);
-           res.status(200);
-     res.setHeader('Content-Type', 'image/png');
 
-         res.send(buffer);
-     //console.log();
- })
-   .catch(e => console.error('ERR:', e));
 });
 // for (var i = 0; i <100; i++) {
 //   data.push({ "date": formatDate(randomDate()), "amount": getRandomInt(0, 5000) })
@@ -84,20 +75,20 @@ app.post('/', function(req, res) {
 
 // create output files
 app.use(errorHandler);
-// app.get('/ff', function(req, res) {
-//
-//   svg2png(svgBuffer)
-//     .then(buffer => {
-//       //fs.writeFile(dest+'.png', buffer);
-//             res.status(200);
-//       res.setHeader('Content-Type', 'image/png');
-//
-//           res.send(buffer);
-//       //console.log();
-//   })
-//     .catch(e => console.error('ERR:', e));
-//
-// });
+app.get('/ff', function(req, res) {
+
+  svg2png(svgBuffer)
+    .then(buffer => {
+      //fs.writeFile(dest+'.png', buffer);
+            res.status(200);
+      res.setHeader('Content-Type', 'image/png');
+
+          res.send(buffer);
+      //console.log();
+  })
+    .catch(e => console.error('ERR:', e));
+
+});
 //
 app.set('port', process.env.PORT || 8002);
 
