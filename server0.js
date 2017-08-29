@@ -12,12 +12,12 @@ var arr = [
 
     //console.log(JSON.stringify(arr));
     axios.post('https://google-chart.herokuapp.com/rr',arr).then(function(res) {
-      console.log("statusCode: ", res.status); // <======= Here's the status code
-      console.log("headers: ", res.headers);
+      console.log("statusCode: ", res); // <======= Here's the status code
+      //console.log("headers: ", res.headers);
     // console.log(response.headers);
     // console.log(response.config);
   })
-.catch(res=>console.log(res.status));
+.catch(res=>console.log(res.statusCode));
 // create output files
 
 //

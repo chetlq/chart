@@ -41,20 +41,20 @@ var svgBuffer;
 app.post('/rr', function(req, res) {
   data = req.body;
   console.log(data);
-  data.sort(function(a,b){
-    if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
-    else{return -1}
-  });
-
- data.reduce(function(previousValue, currentItem, index) {
-     if (previousValue.date.trim()==currentItem.date) {
-      currentItem.date=previousValue.date+" ";
-    };
-        return currentItem
-});
- my_d3bar = d3nBar({ data: data });
-
- svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
+//   data.sort(function(a,b){
+//     if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
+//     else{return -1}
+//   });
+//
+//  data.reduce(function(previousValue, currentItem, index) {
+//      if (previousValue.date.trim()==currentItem.date) {
+//       currentItem.date=previousValue.date+" ";
+//     };
+//         return currentItem
+// });
+//  my_d3bar = d3nBar({ data: data });
+//
+//  svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
 res.status(200);
 res.send("ok");
 });
