@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var express    = require('express');        // call express
 var app        = express();
 //
-// var moment = require('moment');
+var moment = require('moment');
 //
 // function randomDate(){
 //    var startDate = new Date(2000,0,1).getTime();
