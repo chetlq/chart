@@ -41,10 +41,10 @@ var svgBuffer;
 app.post('/rr', function(req, res) {
   data = req.body;
   console.log(data);
-//   data.sort(function(a,b){
-//     if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
-//     else{return -1}
-//   });
+  data.sort(function(a,b){
+    if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
+    else{return -1}
+  });
 //
 //  data.reduce(function(previousValue, currentItem, index) {
 //      if (previousValue.date.trim()==currentItem.date) {
