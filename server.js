@@ -1,9 +1,8 @@
 const svg2png = require('svg2png');
 const d3 = require('d3-node')().d3;
-//const d3nBar = require('d3node-barchart');
 const d3nBar = require('./chart2.js');
-
-//const d3nBar2 = require('./chart2.js');
+var bodyParser = require('body-parser');
+//const d3nBar = require('./example.js');
 var express    = require('express');        // call express
 var app        = express();
 
@@ -30,52 +29,77 @@ function formatDate(date){
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
 
 var data = [];
-for (var i = 0; i <100; i++) {
-  data.push({ "key": formatDate(randomDate()), "value": getRandomInt(-5000, 5000) })
-};
+var my_d3bar;
 
-  data.sort(function(a,b){
-    if (moment(a.key, "DD.MM.YYYY")>moment(b.key, "DD.MM.YYYY")) {return 1}
-    else{return -1}
-  });
- data.reduce(function(previousValue, currentItem, index) {
-     if (previousValue.key.trim()==currentItem.key) {
-      currentItem.key=previousValue.key+" ";
-    };
-        return currentItem
+var svgBuffer;
+app.post('/', function(req, res) {
+  data = req.body;
+  console.log(data);
+//   data.sort(function(a,b){
+//     if (moment(a.date, "DD.MM.YYYY")>moment(b.date, "DD.MM.YYYY")) {return 1}
+//     else{return -1}
+//   });
+//
+//  data.reduce(function(previousValue, currentItem, index) {
+//      if (previousValue.date.trim()==currentItem.date) {
+//       currentItem.date=previousValue.date+" ";
+//     };
+//         return currentItem
+// });
+ my_d3bar = d3nBar({ data: data });
+
+ svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
+
+ svg2png(svgBuffer)
+   .then(buffer => {
+     //fs.writeFile(dest+'.png', buffer);
+           res.status(200);
+     res.setHeader('Content-Type', 'image/png');
+
+         res.send(buffer);
+     //console.log();
+ })
+   .catch(e => console.error('ERR:', e));
 });
-//data[0] = { "key": formatDate(randomDate())+/n+formatDate(randomDate()), "value": -4000 }
+// for (var i = 0; i <100; i++) {
+//   data.push({ "date": formatDate(randomDate()), "amount": getRandomInt(0, 5000) })
+// };
+
+
+//data[0] = { "date": formatDate(randomDate())+/n+formatDate(randomDate()), "value": -4000 }
 // data.sort(function(a,b){
 //   if (a.value>b.value) {return 1}
 //   else{return -1}
 // });
-  console.log(data);
+  //console.log(data);
 
-var my_d3bar = d3nBar({ data: data });
 
-var svgBuffer = new Buffer(my_d3bar.svgString(), 'utf-8');
 
 
 // create output files
 app.use(errorHandler);
-app.get('/', function(req, res) {
-
-  svg2png(svgBuffer)
-    .then(buffer => {
-      //fs.writeFile(dest+'.png', buffer);
-            res.status(200);
-      res.setHeader('Content-Type', 'image/png');
-
-          res.send(buffer);
-      //console.log();
-  })
-    .catch(e => console.error('ERR:', e));
-
-});
+// app.get('/ff', function(req, res) {
 //
-app.set('port', process.env.PORT || 8001);
+//   svg2png(svgBuffer)
+//     .then(buffer => {
+//       //fs.writeFile(dest+'.png', buffer);
+//             res.status(200);
+//       res.setHeader('Content-Type', 'image/png');
+//
+//           res.send(buffer);
+//       //console.log();
+//   })
+//     .catch(e => console.error('ERR:', e));
+//
+// });
+//
+app.set('port', process.env.PORT || 8002);
 
 var server = app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + server.address().port);

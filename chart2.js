@@ -20,11 +20,12 @@ function bar({
   height: _height = 600,
   margin: _margin =
   (function(){
-   var arrZnak = ((new D3Node()).d3).extent(data, (d) => d.value);
+   var arrZnak = ((new D3Node()).d3).extent(data, (d) => d.amount);
    var num = 25;
    var count = data.length;
    var top;
    var  bottom;
+   var left = 80;
    if (count<num){
       top = 30;
       bottom = 30;
@@ -35,13 +36,13 @@ function bar({
    switch (getZnak(arrZnak)) {
      case 0:
 
-       return { top: top, right: 10, bottom: bottom, left: 60 }
+       return { top: top, right: 10, bottom: bottom, left: left }
        break;
     case -1:
-      return { top:70, right: 10, bottom: bottom, left: 60 }
+      return { top:70, right: 10, bottom: bottom, left: left }
       break;
     case 1:
-      return { top: top, right: 10, bottom: 70, left: 60 }
+      return { top: top, right: 10, bottom: 70, left: left }
       break;
 
      default:
@@ -68,7 +69,7 @@ function bar({
 
     const width = _width - _margin.left - _margin.right;
     const height = _height - _margin.top - _margin.bottom;
-var arrZnak = _d3.extent(data, (d) => d.value);
+var arrZnak = _d3.extent(data, (d) => d.amount);
 
 var num = 25;
 var count = data.length;
@@ -88,17 +89,17 @@ function count(element, index, array) {
 
 
 
-    var y = _d3.scaleLinear().range([height, 0]); //.domain(_d3.extent(data, function(d) { return d.value; })).range([height, 0]);
+    var y = _d3.scaleLinear().range([height, 0]); //.domain(_d3.extent(data, function(d) { return d.amount; })).range([height, 0]);
     var yAxis = _d3.axisLeft()
       .scale(y);
 
     //.orient("left");
   var arr_x1 = data.map(function(d) {
-    if(d.value>0) return d.key;
+    if(d.amount>0) return d.date;
 
   });
   var arr_x2 = data.map(function(d) {
-    if(d.value<0) return d.key;
+    if(d.amount<0) return d.date;
 
   });
 
@@ -107,26 +108,26 @@ function count(element, index, array) {
 
     x.domain(data.map(function(d) {
 
-      return d.key;
+      return d.date;
 
     }));
     x2.domain(data.map(function(d) {
-   return d.key
+   return d.date
     }));
 
 
 console.log("Znak: "+getZnak(arrZnak));
 switch (getZnak(arrZnak)) {
   case -1:
-    y.domain([_d3.min(data, (d) => d.value),0]);
+    y.domain([_d3.min(data, (d) => d.amount),0]);
     break;
   case 0:
   y.domain(_d3.extent(data, function(d) {
-      return d.value;
+      return d.amount;
   })).nice();
     break;
   case 1:
-    y.domain([0, _d3.max(data, (d) => d.value)]);
+    y.domain([0, _d3.max(data, (d) => d.amount)]);
     break;
 }
 
@@ -136,33 +137,33 @@ switch (getZnak(arrZnak)) {
  enter().
  append('rect')
  .attr("fill",  function(d) {
-   //console.log(Math.round((d.value /(_d3.min(data, (d) => d.value)))*255));
-   if (d.value<0){
-   var k = _d3.min(data, (d) => d.value);
-   console.log(255-Math.round((d.value /k )*127));
-   return "rgb("+(255-Math.round((d.value /k )*30))+", "+(255-Math.round((d.value /k )*255))+", " + 0 + ")"
+   //console.log(Math.round((d.amount /(_d3.min(data, (d) => d.amount)))*255));
+   if (d.amount<0){
+   var k = _d3.min(data, (d) => d.amount);
+   console.log(255-Math.round((d.amount /k )*127));
+   return "rgb("+(255-Math.round((d.amount /k )*30))+", "+(255-Math.round((d.amount /k )*255))+", " + 0 + ")"
  }
- if (d.value>0){
-   var k = _d3.max(data, (d) => d.value);
+ if (d.amount>0){
+   var k = _d3.max(data, (d) => d.amount);
    //console.log(k);
-   return "rgb("+0+", "+(255-Math.round((d.value/k)*127))+", "+Math.round((d.value/k)*255)+")"
+   return "rgb("+0+", "+(255-Math.round((d.amount/k)*127))+", "+Math.round((d.amount/k)*255)+")"
   }
  })
- //.attr("class", function(d) { return "bar bar--" + (d.value < 0 ? "negative" : "positive"); })
+ //.attr("class", function(d) { return "bar bar--" + (d.amount < 0 ? "negative" : "positive"); })
  .attr('x', function(d) {
-      return x(d.key);
+      return x(d.date);
     }).attr('width', x.bandwidth()).attr('y', function(d) {
-      if (d.value > 0) {
-        return y(d.value);
+      if (d.amount > 0) {
+        return y(d.amount);
       } else {
         return y(0);
         //console.log(y(0));
       }
     })
     .attr('height', function(d) {
-      //console.log(y(d.value)+" : "+  y(0));
-      //console.log("ssssss : "+ Math.abs(y(d.value) - y(0)));
-      return Math.abs(y(d.value) - y(0));
+      //console.log(y(d.amount)+" : "+  y(0));
+      //console.log("ssssss : "+ Math.abs(y(d.amount) - y(0)));
+      return Math.abs(y(d.amount) - y(0));
     });
 
 
@@ -241,17 +242,17 @@ g.selectAll("text.bar")
   .attr("text-anchor", function(d) {
     if(count<num){return "middle";}
     else{
-    if (d.value > 0) {
-      var por = (d.value + "").length;
-      if (((-y(d.value) + y(0)) / por) < 10) {
+    if (d.amount > 0) {
+      var por = (d.amount + "").length;
+      if (((-y(d.amount) + y(0)) / por) < 10) {
         return "start";
       } else {
         return "end";
       }
     }
-    if (d.value < 0) {
-      var por = (d.value + "").length - 1;
-      if (((y(d.value) - y(0)) / por) < 10) {
+    if (d.amount < 0) {
+      var por = (d.amount + "").length - 1;
+      if (((y(d.amount) - y(0)) / por) < 10) {
         return "end"
       } else {
         return "start"
@@ -263,36 +264,36 @@ g.selectAll("text.bar")
 
   })
   .attr("x", function(d) {
-    if(count<num){return x(d.key) + x.bandwidth()/2;}
+    if(count<num){return x(d.date) + x.bandwidth()/2;}
     else{
-    if (d.value > 0) {
-      return x(d.key) + x.bandwidth() / 2 + myright;
+    if (d.amount > 0) {
+      return x(d.date) + x.bandwidth() / 2 + myright;
     }
-    if (d.value < 0) {
-      return x(d.key) + x.bandwidth() / 2 + myright;
+    if (d.amount < 0) {
+      return x(d.date) + x.bandwidth() / 2 + myright;
     }
   }
 
   })
   .attr("y", function(d) {
     if(count<num){
-      if (d.value>0){return y(d.value) - 5;} else { return y(d.value) +15; }
+      if (d.amount>0){return y(d.amount) - 5;} else { return y(d.amount) +15; }
     }
     else{
-    if (d.value > 0) {
-      var por = (d.value + "").length;
-      if (((-y(d.value) + y(0)) / por) < 10) {
+    if (d.amount > 0) {
+      var por = (d.amount + "").length;
+      if (((-y(d.amount) + y(0)) / por) < 10) {
         return y(0);
       } else {
-        return y(d.value);
+        return y(d.amount);
       }
     }
-    if (d.value < 0) {
-      var por = (d.value + "").length - 1;
-      if (((y(d.value) - y(0)) / por) < 10) {
+    if (d.amount < 0) {
+      var por = (d.amount + "").length - 1;
+      if (((y(d.amount) - y(0)) / por) < 10) {
         return y(0) + 2;
       } else {
-        return y(d.value);
+        return y(d.amount);
       }
     }
 }
@@ -301,24 +302,24 @@ g.selectAll("text.bar")
   .attr("transform", function(d) {
     if (count<num){}
     else{
-    if (d.value > 0) {
-      var por = (d.value + "").length;
-      //console.log((y(d.value)-y(0))/por);
+    if (d.amount > 0) {
+      var por = (d.amount + "").length;
+      //console.log((y(d.amount)-y(0))/por);
 
-      if (((-y(d.value) + y(0)) / por) < 10) {
-        return "rotate(-90," + (x(d.key) + x.bandwidth() / 2 + myright) + "," + y(0) + ")";
+      if (((-y(d.amount) + y(0)) / por) < 10) {
+        return "rotate(-90," + (x(d.date) + x.bandwidth() / 2 + myright) + "," + y(0) + ")";
       } else {
-        return "rotate(-90," + (x(d.key) + x.bandwidth() / 2 + myright) + "," + y(d.value) + ")";
+        return "rotate(-90," + (x(d.date) + x.bandwidth() / 2 + myright) + "," + y(d.amount) + ")";
       }
     }
 
 
-    if (d.value < 0) {
-      var por = (d.value + "").length - 1;
-      if (((y(d.value) - y(0)) / por) < 10) {
-        return "rotate(-90," + (x(d.key) + x.bandwidth() / 2 + myright) + "," + (y(0) + 2) + ")";
+    if (d.amount < 0) {
+      var por = (d.amount + "").length - 1;
+      if (((y(d.amount) - y(0)) / por) < 10) {
+        return "rotate(-90," + (x(d.date) + x.bandwidth() / 2 + myright) + "," + (y(0) + 2) + ")";
       } else {
-        return "rotate(-90," + (x(d.key) + x.bandwidth() / 2 + myright) + "," + (y(d.value)) + ")";
+        return "rotate(-90," + (x(d.date) + x.bandwidth() / 2 + myright) + "," + (y(d.amount)) + ")";
       }
     }
 
@@ -328,11 +329,10 @@ g.selectAll("text.bar")
 
   .text(function(d) {
 
-    return d.value;
+    return d.amount;
 
   });
-  g.selectAll("body")
-  .attr("style","background-color: black");
+
 
 
         return d3n;
