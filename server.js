@@ -5,30 +5,30 @@ var bodyParser = require('body-parser');
 //const d3nBar = require('./example.js');
 var express    = require('express');        // call express
 var app        = express();
-
-var moment = require('moment');
-
-function randomDate(){
-   var startDate = new Date(2000,0,1).getTime();
-   var endDate =  new Date(2018,0,1).getTime();
-   var spaces = (endDate - startDate);
-   var timestamp = Math.round(Math.random() * spaces);
-   timestamp += startDate;
-   return new Date(timestamp);
-}
-function formatDate(date){
-    var month = randomDate().getMonth()+1;
-    var day = randomDate().getDate();
-
-    month = month < 10 ? '0' + month : month;
-    day = day < 10 ? '0' + day : day;
-
-    return String(day+"."+month+"."+date.getFullYear())  ;
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
+//
+// var moment = require('moment');
+//
+// function randomDate(){
+//    var startDate = new Date(2000,0,1).getTime();
+//    var endDate =  new Date(2018,0,1).getTime();
+//    var spaces = (endDate - startDate);
+//    var timestamp = Math.round(Math.random() * spaces);
+//    timestamp += startDate;
+//    return new Date(timestamp);
+// }
+// function formatDate(date){
+//     var month = randomDate().getMonth()+1;
+//     var day = randomDate().getDate();
+//
+//     month = month < 10 ? '0' + month : month;
+//     day = day < 10 ? '0' + day : day;
+//
+//     return String(day+"."+month+"."+date.getFullYear())  ;
+// }
+//
+// function getRandomInt(min, max) {
+//   return Math.floor(Math.random() * (max - min)) + min;
+// };
 app.use(bodyParser.urlencoded({
     extended: true
 }));
