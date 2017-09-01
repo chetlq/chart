@@ -26,9 +26,10 @@ var moment = require('moment');
 //     return String(day+"."+month+"."+date.getFullYear())  ;
 // }
 //
-// function getRandomInt(min, max) {
-//   return Math.floor(Math.random() * (max - min)) + min;
-// };
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -39,6 +40,7 @@ var my_d3bar;
 
 var svgBuffer;
 app.post('/rr', function(req, res) {
+  var t = getRandomInt(0,100);
   data = req.body;
   console.log(data);
   data.sort(function(a,b){
@@ -64,7 +66,7 @@ svg2png(svgBuffer)
           res.status(200);
     res.setHeader('Content-Type', 'image/png');
 
-        res.send(buffer);
+        res.send(t);
     //console.log();
 })
   .catch(e => console.error('ERR:', e));
@@ -87,7 +89,7 @@ svg2png(svgBuffer)
 
 // create output files
 app.use(errorHandler);
-app.get('/ff', function(req, res) {
+app.get('/ff'+t, function(req, res) {
 
   svg2png(svgBuffer)
     .then(buffer => {
